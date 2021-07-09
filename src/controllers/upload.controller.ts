@@ -8,5 +8,13 @@ export class uploadController {
         }
         res.send(file);
     }
+
+    uploadEstatePhotos = (req: express.Request, res: express.Response) => {
+        let files=req.files;
+        if(!files){
+            console.log("NO FILES!");
+        }
+        res.send(files);
+    }
 }
 

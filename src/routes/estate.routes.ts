@@ -1,0 +1,39 @@
+import express from 'express';
+import { estateController } from '../controllers/estate.controller';
+const estateRouter = express.Router();
+
+estateRouter.route('/getAllApprovedEstates').get(
+    (req, res)=>new estateController().getAllApprovedEstates(req, res)
+);
+estateRouter.route('/getAllEstatesRequest').get(
+    (req,res)=>new estateController().getAllEstatesRequest(req,res)
+);
+
+
+estateRouter.route('/acceptRequest').post(
+    (req,res)=>new estateController().acceptEstateRequest(req,res)
+);
+
+estateRouter.route('/declineRequest').post(
+    (req,res)=>new estateController().declineEstateRequest(req,res)
+);
+
+estateRouter.route('/searchByCity').post(
+    (req,res)=>new estateController().searchByCity(req,res)
+);
+
+estateRouter.route('/searchByPrice').post(
+    (req,res)=>new estateController().searchByPrice(req,res)
+);
+estateRouter.route('/searchByPriceAndCity').post(
+    (req,res)=>new estateController().searchByPriceAndCity(req,res)
+);
+
+estateRouter.route('/getMyEstates').post(
+    (req,res)=>new estateController().getAllEstatesForUser(req,res)
+)
+estateRouter.route('/insertEstate').post(
+    (req,res)=>new estateController().insertEstate(req,res)
+)
+
+export default estateRouter;

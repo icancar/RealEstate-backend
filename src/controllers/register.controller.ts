@@ -24,4 +24,23 @@ export class registerController{
         })
         
     }
+
+    changePassword = (req: express.Request, res: express.Response)=>{
+        let username=req.body.username;
+        let oldPassword=req.body.oldPassword;
+        let newPassword=req.body.newPassword;
+
+        User.findOne({'username': username, 'password':oldPassword}, (err, user)=>{
+            if(user){
+                User.collection.updateOne({ 'username': username }, { $set: { 'password': newPassword } }).then((ok) => {
+                    res.json({ 'message': 'passwordChanged' });
+                }).catch((err) => {
+                    console.log(err);
+                    res.json({ 'message': err });
+                });
+            }else {
+                res.json({'message': 'UserDoesNotExist'})
+            }
+        })
+    }
 }

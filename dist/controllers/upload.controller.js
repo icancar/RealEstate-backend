@@ -10,6 +10,13 @@ class uploadController {
             }
             res.send(file);
         };
+        this.uploadEstatePhotos = (req, res) => {
+            let files = req.files;
+            if (!files) {
+                console.log("NO FILES!");
+            }
+            res.send(files);
+        };
     }
 }
 exports.uploadController = uploadController;

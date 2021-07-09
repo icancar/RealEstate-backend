@@ -1,6 +1,6 @@
 import multer from 'multer';
 
-const storage = multer.diskStorage({
+const storageProfilePhotos = multer.diskStorage({
     destination: (req, file, callback) => {
         callback(null, '../RealEstate-frontend/src/assets/users');
     },
@@ -9,5 +9,16 @@ const storage = multer.diskStorage({
     }
 });
 
+const storageEstatePhotos = multer.diskStorage({
+    destination: (req, file, callback) => {
+        callback(null, '../RealEstate-frontend/src/assets/properties');
+    },
+    filename: (req, file, callback) => {
+        callback(null, file.originalname);
+    }
+});
 
-export const uploadProfilePhoto = multer({ storage: storage });
+
+
+export const uploadProfilePhoto = multer({ storage: storageProfilePhotos });
+export const uploadEstatePhotos = multer({ storage: storageEstatePhotos});

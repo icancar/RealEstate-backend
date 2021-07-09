@@ -29,6 +29,24 @@ class registerController {
                 }
             });
         };
+        this.changePassword = (req, res) => {
+            let username = req.body.username;
+            let oldPassword = req.body.oldPassword;
+            let newPassword = req.body.newPassword;
+            user_1.default.findOne({ 'username': username, 'password': oldPassword }, (err, user) => {
+                if (user) {
+                    user_1.default.collection.updateOne({ 'username': username }, { $set: { 'password': newPassword } }).then((ok) => {
+                        res.json({ 'message': 'passwordChanged' });
+                    }).catch((err) => {
+                        console.log(err);
+                        res.json({ 'message': err });
+                    });
+                }
+                else {
+                    res.json({ 'message': 'UserDoesNotExist' });
+                }
+            });
+        };
     }
 }
 exports.registerController = registerController;
