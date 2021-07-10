@@ -35,5 +35,18 @@ estateRouter.route('/getMyEstates').post(
 estateRouter.route('/insertEstate').post(
     (req,res)=>new estateController().insertEstate(req,res)
 )
+estateRouter.route('/getAllEstates').get(
+   (req,res)=>new estateController().getAllEstates(req,res)
+)
+estateRouter.route('/promoteEstate').post(
+    (req,res)=>new estateController().promoteEstate(req,res)
+)
+estateRouter.route('/unpromoteEstate').post(
+    (req,res)=>new estateController().unpromoteEstate(req,res)
+)
+estateRouter.route('/getAllPromotedEstates').get(
+    (req,res)=>new estateController().getAllPromotedEstates(req,res)
+)
+
 
 export default estateRouter;

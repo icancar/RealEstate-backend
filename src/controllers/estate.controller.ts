@@ -2,8 +2,7 @@ import express from 'express';
 import Estate from '../models/estate';
 
 export class estateController{
-    getAllApprovedEstates = (req: express.Request, res: express.Response)=>{
-        
+    getAllApprovedEstates = (req: express.Request, res: express.Response)=>{ 
         Estate.find({'approved':true},
             (err, Estate)=>{
                 if(err) console.log(err);
@@ -90,12 +89,55 @@ export class estateController{
     }
 
     insertEstate = (req: express.Request, res: express.Response) =>{
-        let newEstate=new Estate(req.body);
-        newEstate.save().then((estate)=>{
-            res.json({'message':'estateAdded'})
-        }).catch((err)=>{
-            console.log(err);
-            res.json({'message':err})
+        Estate.find({}, (err, estates)=>{
+            if(err) console.log(err);
+            else {
+                let id=estates.length+1;
+                let newEstate=new Estate(req.body);
+                newEstate.set("idAdvertisement", id);
+                newEstate.save().then((estate)=>{
+                    res.json({'message':'estateAdded'})
+                }).catch((err)=>{
+                    console.log(err);
+                    res.json({'message':err})
+                })
+            }
         })
+    }
+        
+    getAllEstates  = (req: express.Request, res: express.Response) =>{
+        Estate.find({},
+            (err, Estate)=>{
+                if(err) console.log(err);
+                else res.json(Estate);
+            })
+    }
+
+    promoteEstate = (req: express.Request, res: express.Response) =>{
+        let id=req.body.id;
+
+        Estate.updateOne({'idAdvertisement':id},{$set:{'promoted':true}}).then((ok)=>{
+            res.json({ 'message': 'estatePromoted' });
+        }).catch((err)=>{
+            res.json({'message': err})
+        })
+    }
+
+    unpromoteEstate = (req: express.Request, res: express.Response) =>{
+        let id=req.body.id;
+
+        Estate.updateOne({'idAdvertisement':id},{$set:{'promoted':false}}).then((ok)=>{
+            res.json({ 'message': 'estateUnPromoted' });
+        }).catch((err)=>{
+            res.json({'message': err})
+        })
+    }
+
+    getAllPromotedEstates  = (req: express.Request, res: express.Response) =>{
+        Estate.find({'promoted':true},
+            (err, Estate)=>{
+                if(err) console.log(err);
+                else res.json(Estate);
+            })
     }
 }

@@ -85,12 +85,52 @@ class estateController {
             });
         };
         this.insertEstate = (req, res) => {
-            let newEstate = new estate_1.default(req.body);
-            newEstate.save().then((estate) => {
-                res.json({ 'message': 'estateAdded' });
+            estate_1.default.find({}, (err, estates) => {
+                if (err)
+                    console.log(err);
+                else {
+                    let id = estates.length + 1;
+                    let newEstate = new estate_1.default(req.body);
+                    newEstate.set("idAdvertisement", id);
+                    newEstate.save().then((estate) => {
+                        res.json({ 'message': 'estateAdded' });
+                    }).catch((err) => {
+                        console.log(err);
+                        res.json({ 'message': err });
+                    });
+                }
+            });
+        };
+        this.getAllEstates = (req, res) => {
+            estate_1.default.find({}, (err, Estate) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json(Estate);
+            });
+        };
+        this.promoteEstate = (req, res) => {
+            let id = req.body.id;
+            estate_1.default.updateOne({ 'idAdvertisement': id }, { $set: { 'promoted': true } }).then((ok) => {
+                res.json({ 'message': 'estatePromoted' });
             }).catch((err) => {
-                console.log(err);
                 res.json({ 'message': err });
+            });
+        };
+        this.unpromoteEstate = (req, res) => {
+            let id = req.body.id;
+            estate_1.default.updateOne({ 'idAdvertisement': id }, { $set: { 'promoted': false } }).then((ok) => {
+                res.json({ 'message': 'estateUnPromoted' });
+            }).catch((err) => {
+                res.json({ 'message': err });
+            });
+        };
+        this.getAllPromotedEstates = (req, res) => {
+            estate_1.default.find({ 'promoted': true }, (err, Estate) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json(Estate);
             });
         };
     }
