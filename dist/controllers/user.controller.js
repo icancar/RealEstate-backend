@@ -62,6 +62,22 @@ class userController {
                 }
             });
         };
+        this.getAllUsers = (req, res) => {
+            user_1.default.find({}, (err, User) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json(User);
+            });
+        };
+        this.deleteUser = (req, res) => {
+            let username = req.body.username;
+            user_1.default.deleteOne({ 'username': username, 'accepted': true }).then((ok) => {
+                res.json({ 'message': 'userDeleted' });
+            }).catch((err) => {
+                res.json({ 'message': err });
+            });
+        };
     }
 }
 exports.userController = userController;

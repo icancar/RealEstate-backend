@@ -31,5 +31,14 @@ loginRouter.route('/getUserFromUsername').post(
     
 )
 
+loginRouter.route('/getAllUsers').get(
+    (req,res)=> new userController().getAllUsers(req,res)
+)
+
+loginRouter.route('/deleteUser').post(
+    (req,res)=> new userController().deleteUser(req,res)
+ 
+)
+
 
 export default loginRouter;

@@ -9,7 +9,7 @@ let Estate = new Schema({
     name: {
         type: String
     },
-    minicipality: {
+    municipality: {
         type: String
     },
     city: {

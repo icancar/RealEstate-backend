@@ -63,4 +63,21 @@ export class userController{
             }
         })
     }
+
+    getAllUsers = (req: express.Request, res: express.Response)=>{
+        User.find({},(err, User)=>{
+                if(err) console.log(err);
+                else res.json(User);
+            })
+    }
+
+    deleteUser = (req: express.Request, res: express.Response) =>{
+        let username=req.body.username;
+        User.deleteOne({'username':username, 'accepted':true}).then((ok)=>{
+            res.json({ 'message': 'userDeleted' });
+        }).catch((err)=>{
+            res.json({'message': err})
+        })
+    }
+    
 }

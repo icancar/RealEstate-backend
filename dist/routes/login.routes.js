@@ -14,5 +14,7 @@ loginRouter.route('/changePassword').post((req, res) => new register_controller_
 loginRouter.route('/editUserInfo').post((req, res) => new user_controller_1.userController().editUserInfo(req, res));
 loginRouter.route('/updateProfilePhoto').post((req, res) => new user_controller_1.userController().updateProfilePhoto(req, res));
 loginRouter.route('/getUserFromUsername').post((req, res) => new user_controller_1.userController().getUserFromUsername(req, res));
+loginRouter.route('/getAllUsers').get((req, res) => new user_controller_1.userController().getAllUsers(req, res));
+loginRouter.route('/deleteUser').post((req, res) => new user_controller_1.userController().deleteUser(req, res));
 exports.default = loginRouter;
 //# sourceMappingURL=login.routes.js.map

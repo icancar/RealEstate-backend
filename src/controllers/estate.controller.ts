@@ -42,7 +42,7 @@ export class estateController{
     searchByCity = (req: express.Request, res: express.Response) =>{
         let city=req.body.cityName;
 
-        Estate.find({'approved':true,'name':{$regex:city}},(err, estates)=>{
+        Estate.find({'approved':true,'city':{$regex:city}},(err, estates)=>{
             if(err) console.log(err);
             else {
                 res.json(estates);
@@ -89,13 +89,14 @@ export class estateController{
     }
 
     insertEstate = (req: express.Request, res: express.Response) =>{
-        Estate.find({}, (err, estates)=>{
+       Estate.find({}, (err, estates)=>{
             if(err) console.log(err);
             else {
                 let id=estates.length+1;
                 let newEstate=new Estate(req.body);
+                console.log(newEstate);
                 newEstate.set("idAdvertisement", id);
-                newEstate.save().then((estate)=>{
+                newEstate.save().then((ok)=>{
                     res.json({'message':'estateAdded'})
                 }).catch((err)=>{
                     console.log(err);
@@ -139,5 +140,51 @@ export class estateController{
                 if(err) console.log(err);
                 else res.json(Estate);
             })
+    }
+
+    getEstateViaId= (req: express.Request, res: express.Response) =>{
+        let id=req.body.id;
+        Estate.findOne({'idAdvertisement':id},
+            (err, Estate)=>{
+                if(err) console.log(err);
+                else res.json(Estate);
+            })
+    }
+
+    updateEstate =  (req: express.Request, res: express.Response) =>{
+        let name=req.body.name;
+        let idAdvertisement=req.body.idAdvertisement;
+        let municipality=req.body.municipality;
+        let city=req.body.city;
+        let street=req.body.street;
+        let streetNumber=req.body.streetNumber;
+        let typeOfAdvertisement=req.body.typeOfAdvertisement;
+        let price=req.body.price;
+        let size=req.body.size;
+        let typeOfEstate=req.body.typeOfEstate;
+        let numberOfFloors=req.body.numberOfFloors;
+        let floorNumber=req.body.floorNumber;
+        let furniture=req.body.furniture;
+        let numberOfRooms=req.body.numberOfRooms
+
+        Estate.updateOne({"idAdvertisement":idAdvertisement}, {$set:{'name':name, 'municipality':municipality, 'city':city, 'street':street, 'streetNumber':streetNumber,
+         'typeOfAdvertisement':typeOfAdvertisement, 'price':price, 'size':size, 'typeOfEstate':typeOfEstate,'numberOfFloors':numberOfFloors,
+        'floorNumber':floorNumber,'furniture':furniture, 'numberOfRooms':numberOfRooms
+    }}).then((ok)=>{
+        res.json({'message':'estateUpdated'});
+    }).catch((err)=>{
+        res.json({'message': err});
+    })
+    }
+
+    updateEstatePhotos=  (req: express.Request, res: express.Response) =>{
+        let id=req.body.idAdvertisement;
+        let gallery=req.body.gallery;
+
+        Estate.updateOne({"idAdvertisement":id}, {$set:{'gallery':gallery}}).then((ok)=>{
+            res.json({'message':'estatePhotosUpdated'});
+        }).catch((err)=>{
+            res.json({'message':err})
+        })
     }
 }

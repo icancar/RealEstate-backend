@@ -41,7 +41,7 @@ class estateController {
         };
         this.searchByCity = (req, res) => {
             let city = req.body.cityName;
-            estate_1.default.find({ 'approved': true, 'name': { $regex: city } }, (err, estates) => {
+            estate_1.default.find({ 'approved': true, 'city': { $regex: city } }, (err, estates) => {
                 if (err)
                     console.log(err);
                 else {
@@ -91,8 +91,9 @@ class estateController {
                 else {
                     let id = estates.length + 1;
                     let newEstate = new estate_1.default(req.body);
+                    console.log(newEstate);
                     newEstate.set("idAdvertisement", id);
-                    newEstate.save().then((estate) => {
+                    newEstate.save().then((ok) => {
                         res.json({ 'message': 'estateAdded' });
                     }).catch((err) => {
                         console.log(err);
@@ -131,6 +132,48 @@ class estateController {
                     console.log(err);
                 else
                     res.json(Estate);
+            });
+        };
+        this.getEstateViaId = (req, res) => {
+            let id = req.body.id;
+            estate_1.default.findOne({ 'idAdvertisement': id }, (err, Estate) => {
+                if (err)
+                    console.log(err);
+                else
+                    res.json(Estate);
+            });
+        };
+        this.updateEstate = (req, res) => {
+            let name = req.body.name;
+            let idAdvertisement = req.body.idAdvertisement;
+            let municipality = req.body.municipality;
+            let city = req.body.city;
+            let street = req.body.street;
+            let streetNumber = req.body.streetNumber;
+            let typeOfAdvertisement = req.body.typeOfAdvertisement;
+            let price = req.body.price;
+            let size = req.body.size;
+            let typeOfEstate = req.body.typeOfEstate;
+            let numberOfFloors = req.body.numberOfFloors;
+            let floorNumber = req.body.floorNumber;
+            let furniture = req.body.furniture;
+            let numberOfRooms = req.body.numberOfRooms;
+            estate_1.default.updateOne({ "idAdvertisement": idAdvertisement }, { $set: { 'name': name, 'municipality': municipality, 'city': city, 'street': street, 'streetNumber': streetNumber,
+                    'typeOfAdvertisement': typeOfAdvertisement, 'price': price, 'size': size, 'typeOfEstate': typeOfEstate, 'numberOfFloors': numberOfFloors,
+                    'floorNumber': floorNumber, 'furniture': furniture, 'numberOfRooms': numberOfRooms
+                } }).then((ok) => {
+                res.json({ 'message': 'estateUpdated' });
+            }).catch((err) => {
+                res.json({ 'message': err });
+            });
+        };
+        this.updateEstatePhotos = (req, res) => {
+            let id = req.body.idAdvertisement;
+            let gallery = req.body.gallery;
+            estate_1.default.updateOne({ "idAdvertisement": id }, { $set: { 'gallery': gallery } }).then((ok) => {
+                res.json({ 'message': 'estatePhotosUpdated' });
+            }).catch((err) => {
+                res.json({ 'message': err });
             });
         };
     }

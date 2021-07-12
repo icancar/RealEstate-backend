@@ -48,5 +48,17 @@ estateRouter.route('/getAllPromotedEstates').get(
     (req,res)=>new estateController().getAllPromotedEstates(req,res)
 )
 
+estateRouter.route('/getEstateViaId').post(
+    (req,res)=>new estateController().getEstateViaId(req,res)
+)
+
+estateRouter.route('/updateEstate').post(
+    (req,res)=>new estateController().updateEstate(req,res)
+)
+
+estateRouter.route('/updateEstatePhotos').post(
+    (req,res)=>new estateController().updateEstatePhotos(req,res)
+)
+
 
 export default estateRouter;
