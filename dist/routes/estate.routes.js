@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const fee_controller_1 = require("../controllers/fee.controller");
 const estate_controller_1 = require("../controllers/estate.controller");
 const estateRouter = express_1.default.Router();
 estateRouter.route('/getAllApprovedEstates').get((req, res) => new estate_controller_1.estateController().getAllApprovedEstates(req, res));
@@ -22,5 +23,7 @@ estateRouter.route('/getAllPromotedEstates').get((req, res) => new estate_contro
 estateRouter.route('/getEstateViaId').post((req, res) => new estate_controller_1.estateController().getEstateViaId(req, res));
 estateRouter.route('/updateEstate').post((req, res) => new estate_controller_1.estateController().updateEstate(req, res));
 estateRouter.route('/updateEstatePhotos').post((req, res) => new estate_controller_1.estateController().updateEstatePhotos(req, res));
+estateRouter.route('/updateFee').post((req, res) => new fee_controller_1.feeController().updateFee(req, res));
+estateRouter.route('/getFee').post((req, res) => new fee_controller_1.feeController().getFee(req, res));
 exports.default = estateRouter;
 //# sourceMappingURL=estate.routes.js.map

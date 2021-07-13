@@ -6,6 +6,7 @@ import loginRouter from './routes/login.routes';
 import uploadRouter from './routes/upload.routes';
 import adminRouter from './routes/admin.routes';
 import estateRouter from './routes/estate.routes';
+import offerRouter from './routes/offer.routes';
 
 
 const app = express();
@@ -25,6 +26,7 @@ router.use('/users', loginRouter);
 router.use('/upload', uploadRouter);
 router.use('/admin', adminRouter);
 router.use('/estates', estateRouter);
+router.use('/offers', offerRouter);
 
 app.use('/', router);
 app.listen(4000, () => console.log(`Express server running on port 4000`));

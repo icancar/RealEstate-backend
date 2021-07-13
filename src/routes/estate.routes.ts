@@ -1,4 +1,5 @@
 import express from 'express';
+import { feeController } from '../controllers/fee.controller';
 import { estateController } from '../controllers/estate.controller';
 const estateRouter = express.Router();
 
@@ -58,6 +59,14 @@ estateRouter.route('/updateEstate').post(
 
 estateRouter.route('/updateEstatePhotos').post(
     (req,res)=>new estateController().updateEstatePhotos(req,res)
+)
+
+estateRouter.route('/updateFee').post(
+    (req,res)=>new feeController().updateFee(req,res)
+)
+
+estateRouter.route('/getFee').post(
+    (req,res)=>new feeController().getFee(req,res)
 )
 
 
