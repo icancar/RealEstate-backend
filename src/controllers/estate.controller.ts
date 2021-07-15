@@ -3,7 +3,7 @@ import Estate from '../models/estate';
 
 export class estateController{
     getAllApprovedEstates = (req: express.Request, res: express.Response)=>{ 
-        Estate.find({'approved':true},
+        Estate.find({'approved':true, 'sold':false},
             (err, Estate)=>{
                 if(err) console.log(err);
                 else res.json(Estate);
@@ -31,7 +31,7 @@ export class estateController{
     }
 
     getAllEstatesRequest  = (req: express.Request, res: express.Response) =>{
-        Estate.find({'approved':false},
+        Estate.find({'approved':false, "sold":false},
             (err, Estate)=>{
                 if(err) console.log(err);
                 else res.json(Estate);
@@ -42,7 +42,7 @@ export class estateController{
     searchByCity = (req: express.Request, res: express.Response) =>{
         let city=req.body.cityName;
 
-        Estate.find({'approved':true,'city':{$regex:city}},(err, estates)=>{
+        Estate.find({'approved':true,'sold':false,'city':{$regex:city}},(err, estates)=>{
             if(err) console.log(err);
             else {
                 res.json(estates);
@@ -56,7 +56,7 @@ export class estateController{
         console.log(minPrice);
         console.log(maxPrice);
 
-        Estate.find({'approved':true, 'price': {$gte:minPrice,$lte:maxPrice}},(err, estates) => {
+        Estate.find({'approved':true,'sold':false, 'price': {$gte:minPrice,$lte:maxPrice}},(err, estates) => {
             if (err) console.log(err);
             else {
                 res.json(estates);
@@ -69,7 +69,7 @@ export class estateController{
         let maxPrice=req.body.priceMax;
         let cityName=req.body.cityName;
 
-        Estate.find({'approved':true,'name':{$regex:cityName},'price': {$gte:minPrice,$lte:maxPrice}}, (err, e)=>{
+        Estate.find({'approved':true,'sold':false,'name':{$regex:cityName},'price': {$gte:minPrice,$lte:maxPrice}}, (err, e)=>{
             if(err) console.log(err);
             else {
                 res.json(e);
@@ -135,7 +135,7 @@ export class estateController{
     }
 
     getAllPromotedEstates  = (req: express.Request, res: express.Response) =>{
-        Estate.find({'promoted':true},
+        Estate.find({'promoted':true, 'sold':false, 'approved':true},
             (err, Estate)=>{
                 if(err) console.log(err);
                 else res.json(Estate);

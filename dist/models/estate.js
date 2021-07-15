@@ -62,6 +62,9 @@ let Estate = new Schema({
     },
     views: {
         type: Number
+    },
+    sold: {
+        type: Boolean
     }
 });
 exports.default = mongoose_1.default.model('Estate', Estate, 'estates');

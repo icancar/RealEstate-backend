@@ -1,4 +1,5 @@
 import express from 'express';
+import Estate from '../models/estate';
 import Offer from '../models/offer';
 
 export class offerController{
@@ -81,8 +82,13 @@ export class offerController{
         //prihvatanje ponude
         Offer.updateOne({"idOffer":idOffer}, {$set:{"status":"finished", "accepted":true}}).then((ok)=>{
             //odbijanje svih ostalih, tj brisanje iz baze
-        Offer.deleteMany({"idAdvertisement":idAdvertisement, "offerFrom":offerFrom, "offerTo":offerTo, "status":"waiting"}).then((ok)=>{
-            res.json({"message":"offerAccepted"});
+        Offer.updateMany({"idAdvertisement":idAdvertisement, "offerFrom":offerFrom, "offerTo":offerTo, "status":"waiting"}, {$set:{"status":"declined", "accepted":false}}).then((ok)=>{
+           
+            Estate.updateOne({"idAdvertisement":idAdvertisement}, {$set:{"sold":true}}).then((ok)=>{
+                res.json({"message":"offerAccepted"});
+            }).catch((err)=>{
+                res.json({"message":err});
+            })
         }).catch((err)=>{
             res.json({"message":err});
         })
@@ -95,13 +101,30 @@ export class offerController{
 
     declineOfferSale =(req: express.Request, res: express.Response) =>{
         let idOffer=req.body.idOffer;
-        Offer.deleteOne({"idOffer":idOffer}).then((ok)=>{
+        Offer.updateOne({"idOffer":idOffer}, {$set:{"accepted":false, "status":"declined"}}).then((ok)=>{
             res.json({"message":"offerDeclined"});
         }).catch((err)=>{
             res.json({"message":err});
         })
 
         
+    }
+
+    acceptOfferRent = (req: express.Request, res: express.Response) =>{
+        let idOffer=req.body.idOffer;
+        let idAdvertisement=req.body.idAdvertisement;
+        let offerFrom=req.body.offerFrom;
+        let offerTo=req.body.offerTo;
+        let date1=req.body.date1;
+        let date2=req.body.date2;
+
+        Offer.updateOne({"idOffer":idOffer}, {$set:{"status":"accepted","accepted":true }}).then((ok)=>{
+            Offer.updateMany({"idAdvertisement":idAdvertisement,"status":"waiting", "offerFrom":offerFrom, "offerTo":offerTo, $or:[{"date1":{$gte:date1, $lte:date2}},{"date1":{$gte:date1}, "date2":{$lte:date2}},{"date1":{$lte:date1}, "date2":{$gte:date2}},{"date2":{$gte:date1, $lte:date2}}]}, {$set:{"status":"declined", "accepted":false}}).then((ok)=>{
+                res.json({"message":"offerAccepted"})
+            })
+        }).catch((err)=>{
+            res.json({"message":err});
+        })
     }
 
 }

@@ -36,6 +36,9 @@ offerRouter.route("/declineOfferSale").post(
     (req,res)=> new offerController().declineOfferSale(req,res)
  
 )
-
+offerRouter.route("/acceptOfferRent").post(
+    (req,res)=> new offerController().acceptOfferRent(req,res)
+ 
+)
 
 export default offerRouter;

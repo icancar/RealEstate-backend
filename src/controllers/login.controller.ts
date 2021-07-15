@@ -6,7 +6,7 @@ export class loginController{
         let username = req.body.username;
         let password = req.body.password;
 
-        User.findOne({'username':username, 'password': password},
+        User.findOne({'username':username, 'password': password, 'accepted':true},
             (err, User)=>{
                 if(err) console.log(err);
                 else res.json(User);

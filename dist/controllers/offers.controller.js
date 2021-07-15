@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.offerController = void 0;
+const estate_1 = __importDefault(require("../models/estate"));
 const offer_1 = __importDefault(require("../models/offer"));
 class offerController {
     constructor() {
@@ -81,8 +82,12 @@ class offerController {
             //prihvatanje ponude
             offer_1.default.updateOne({ "idOffer": idOffer }, { $set: { "status": "finished", "accepted": true } }).then((ok) => {
                 //odbijanje svih ostalih, tj brisanje iz baze
-                offer_1.default.deleteMany({ "idAdvertisement": idAdvertisement, "offerFrom": offerFrom, "offerTo": offerTo, "status": "waiting" }).then((ok) => {
-                    res.json({ "message": "offerAccepted" });
+                offer_1.default.updateMany({ "idAdvertisement": idAdvertisement, "offerFrom": offerFrom, "offerTo": offerTo, "status": "waiting" }, { $set: { "status": "declined", "accepted": false } }).then((ok) => {
+                    estate_1.default.updateOne({ "idAdvertisement": idAdvertisement }, { $set: { "sold": true } }).then((ok) => {
+                        res.json({ "message": "offerAccepted" });
+                    }).catch((err) => {
+                        res.json({ "message": err });
+                    });
                 }).catch((err) => {
                     res.json({ "message": err });
                 });
@@ -92,8 +97,23 @@ class offerController {
         };
         this.declineOfferSale = (req, res) => {
             let idOffer = req.body.idOffer;
-            offer_1.default.deleteOne({ "idOffer": idOffer }).then((ok) => {
+            offer_1.default.updateOne({ "idOffer": idOffer }, { $set: { "accepted": false, "status": "declined" } }).then((ok) => {
                 res.json({ "message": "offerDeclined" });
+            }).catch((err) => {
+                res.json({ "message": err });
+            });
+        };
+        this.acceptOfferRent = (req, res) => {
+            let idOffer = req.body.idOffer;
+            let idAdvertisement = req.body.idAdvertisement;
+            let offerFrom = req.body.offerFrom;
+            let offerTo = req.body.offerTo;
+            let date1 = req.body.date1;
+            let date2 = req.body.date2;
+            offer_1.default.updateOne({ "idOffer": idOffer }, { $set: { "status": "accepted", "accepted": true } }).then((ok) => {
+                offer_1.default.updateMany({ "idAdvertisement": idAdvertisement, "status": "waiting", "offerFrom": offerFrom, "offerTo": offerTo, $or: [{ "date1": { $gte: date1, $lte: date2 } }, { "date1": { $gte: date1 }, "date2": { $lte: date2 } }, { "date1": { $lte: date1 }, "date2": { $gte: date2 } }, { "date2": { $gte: date1, $lte: date2 } }] }, { $set: { "status": "declined", "accepted": false } }).then((ok) => {
+                    res.json({ "message": "offerAccepted" });
+                });
             }).catch((err) => {
                 res.json({ "message": err });
             });

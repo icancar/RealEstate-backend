@@ -60,6 +60,9 @@ let Estate = new Schema(
         },
         views: {
             type: Number
+        },
+        sold:{
+            type:Boolean
         }
     }
 );

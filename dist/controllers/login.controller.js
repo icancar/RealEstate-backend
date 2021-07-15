@@ -10,7 +10,7 @@ class loginController {
         this.login = (req, res) => {
             let username = req.body.username;
             let password = req.body.password;
-            user_1.default.findOne({ 'username': username, 'password': password }, (err, User) => {
+            user_1.default.findOne({ 'username': username, 'password': password, 'accepted': true }, (err, User) => {
                 if (err)
                     console.log(err);
                 else

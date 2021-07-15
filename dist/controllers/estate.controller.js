@@ -8,7 +8,7 @@ const estate_1 = __importDefault(require("../models/estate"));
 class estateController {
     constructor() {
         this.getAllApprovedEstates = (req, res) => {
-            estate_1.default.find({ 'approved': true }, (err, Estate) => {
+            estate_1.default.find({ 'approved': true, 'sold': false }, (err, Estate) => {
                 if (err)
                     console.log(err);
                 else
@@ -32,7 +32,7 @@ class estateController {
             });
         };
         this.getAllEstatesRequest = (req, res) => {
-            estate_1.default.find({ 'approved': false }, (err, Estate) => {
+            estate_1.default.find({ 'approved': false, "sold": false }, (err, Estate) => {
                 if (err)
                     console.log(err);
                 else
@@ -41,7 +41,7 @@ class estateController {
         };
         this.searchByCity = (req, res) => {
             let city = req.body.cityName;
-            estate_1.default.find({ 'approved': true, 'city': { $regex: city } }, (err, estates) => {
+            estate_1.default.find({ 'approved': true, 'sold': false, 'city': { $regex: city } }, (err, estates) => {
                 if (err)
                     console.log(err);
                 else {
@@ -54,7 +54,7 @@ class estateController {
             let maxPrice = req.body.priceMax;
             console.log(minPrice);
             console.log(maxPrice);
-            estate_1.default.find({ 'approved': true, 'price': { $gte: minPrice, $lte: maxPrice } }, (err, estates) => {
+            estate_1.default.find({ 'approved': true, 'sold': false, 'price': { $gte: minPrice, $lte: maxPrice } }, (err, estates) => {
                 if (err)
                     console.log(err);
                 else {
@@ -66,7 +66,7 @@ class estateController {
             let minPrice = req.body.priceMin;
             let maxPrice = req.body.priceMax;
             let cityName = req.body.cityName;
-            estate_1.default.find({ 'approved': true, 'name': { $regex: cityName }, 'price': { $gte: minPrice, $lte: maxPrice } }, (err, e) => {
+            estate_1.default.find({ 'approved': true, 'sold': false, 'name': { $regex: cityName }, 'price': { $gte: minPrice, $lte: maxPrice } }, (err, e) => {
                 if (err)
                     console.log(err);
                 else {
@@ -127,7 +127,7 @@ class estateController {
             });
         };
         this.getAllPromotedEstates = (req, res) => {
-            estate_1.default.find({ 'promoted': true }, (err, Estate) => {
+            estate_1.default.find({ 'promoted': true, 'sold': false, 'approved': true }, (err, Estate) => {
                 if (err)
                     console.log(err);
                 else
